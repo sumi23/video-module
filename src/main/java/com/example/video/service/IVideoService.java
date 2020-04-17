@@ -5,6 +5,7 @@ import com.example.video.exception.DBException;
 import com.example.video.exception.ServiceException;
 import com.example.video.model.Category;
 import com.example.video.model.Level;
+import com.example.video.model.User;
 import com.example.video.model.Video;
 
 public interface IVideoService {
@@ -38,4 +39,8 @@ public interface IVideoService {
 	void deleteReferenceUrlById(int videoId) throws ServiceException;
 
 	void deleteVideoContentById(int videoId) throws ServiceException;
+
+	User getUser(String name) throws ServiceException;
+
+	List<Video> getAllVideos(int pageNo) throws ServiceException;
 }

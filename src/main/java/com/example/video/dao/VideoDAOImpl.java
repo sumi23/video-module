@@ -16,6 +16,7 @@ import com.example.video.constants.DataConstant;
 import com.example.video.exception.DBException;
 import com.example.video.model.Video;
 import com.example.video.model.VideoContent;
+import com.example.video.model.User;
 import com.example.video.model.Category;
 import com.example.video.model.Level;
 import com.example.video.model.ReferenceUrl;
@@ -26,6 +27,38 @@ public class VideoDAOImpl implements IVideoDAO{
 	@Autowired
 	SessionFactory sessionFactory;
 
+	@Override
+	public User findUserByName(String name) throws DBException {
+		User video;
+		try {
+			Session session = this.sessionFactory.getCurrentSession();
+			
+			Query<User> query= session.createQuery("FROM User u where u.userName=:name",User.class);
+			query.setParameter("name",name);
+			video=query.getSingleResult();
+		} catch (Exception e) {
+			throw new DBException("user not record");
+		}
+		return video;
+	}
+	
+	@Override
+	public List<Video> getAllVideos(int pageNo) throws DBException {
+		List<Video> videoList;
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			String hql = "FROM Video";
+			Query<Video> query = session.createQuery(hql, Video.class);
+			query.setFirstResult(pageNo);
+			query.setMaxResults(3);
+			videoList = query.getResultList();
+		} catch (Exception e) {
+			throw new DBException("Error in fetching video records");
+		}
+		return videoList;
+	}
+	
+	
 	@Override
 	public List<Video> getAllVideos() throws DBException {
 		List<Video> videoList;

@@ -29,6 +29,7 @@ import com.example.video.model.Video;
 import com.example.video.service.VideoServiceImpl;
 import com.example.video.constants.RESTUriConstant;
 import com.example.video.util.HTTPStatusResponse;
+import com.example.video.model.User;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -36,6 +37,38 @@ public class VideoController {
 	@Autowired
 	private VideoServiceImpl videoService;
 
+	
+	@GetMapping(value = "/user/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<HTTPStatusResponse> doGetUser(@PathVariable String name)  {
+		User user;
+		try {
+			user = videoService.getUser(name);
+		} catch (ServiceException e) {
+			return new ResponseEntity<>(new HTTPStatusResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
+					HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(
+				new HTTPStatusResponse(HttpStatus.OK.value(), RESTUriConstant.DATA_RETRIVAL_SUCCESS, user),
+				HttpStatus.OK);
+	}
+	
+	
+	@GetMapping(value = "/listVideo/{pageNo}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<HTTPStatusResponse> doGetAllVideosList(@PathVariable int pageNo)  {
+		List<Video> videos;
+		try {
+			
+			videos = videoService.getAllVideos(pageNo);
+			System.out.println("page no in cont"+pageNo);
+		} catch (ServiceException e) {
+			return new ResponseEntity<>(new HTTPStatusResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
+					HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(
+				new HTTPStatusResponse(HttpStatus.OK.value(), RESTUriConstant.DATA_RETRIVAL_SUCCESS, videos),
+				HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<HTTPStatusResponse> doGetAllVideos()  {
 		List<Video> videos;

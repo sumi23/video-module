@@ -6,6 +6,7 @@ import com.example.video.exception.DBException;
 import com.example.video.model.Category;
 import com.example.video.model.Level;
 import com.example.video.model.ReferenceUrl;
+import com.example.video.model.User;
 import com.example.video.model.Video;
 import com.example.video.model.VideoContent;
 
@@ -46,4 +47,8 @@ interface IVideoDAO {
 	VideoContent getSampleProgramById(int id) throws DBException;
 
 	void deleteSampleProgramById(int Id) throws DBException;
+
+	User findUserByName(String name) throws DBException;
+
+	List<Video> getAllVideos(int pageNo) throws DBException;
 }

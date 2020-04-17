@@ -16,6 +16,7 @@ import com.example.video.exception.ServiceException;
 import com.example.video.model.Category;
 import com.example.video.model.Level;
 import com.example.video.model.Video;
+import com.example.video.model.User;
 
 @Service
 public class VideoServiceImpl implements IVideoService {
@@ -23,6 +24,35 @@ public class VideoServiceImpl implements IVideoService {
 	@Autowired
 	private VideoDAOImpl videoDAOImpl;
 
+	
+	@Override
+	public User getUser(String name) throws ServiceException {
+		User user;
+		try {
+			user = videoDAOImpl.findUserByName(name);
+			if (user==null)
+				throw new ServiceException("user not found");
+		} catch (DBException e) {
+			throw new ServiceException(e.getMessage());
+		}
+		return user;
+	}
+	
+	@Override
+	public List<Video> getAllVideos(int pageNo) throws ServiceException {
+		List<Video> videos;
+		try {
+			System.out.println("page no in service"+pageNo);
+			videos = videoDAOImpl.getAllVideos(pageNo);
+			if (videos.isEmpty())
+				throw new ServiceException(BusinessConstant.VIDEOS_NOT_FOUND);
+		} catch (DBException e) {
+			throw new ServiceException(e.getMessage());
+		}
+		return videos;
+	
+	}
+	
 	@Override
 	public List<Video> getAllVideos() throws ServiceException {
 		List<Video> videos;
