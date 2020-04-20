@@ -43,14 +43,14 @@ public class VideoDAOImpl implements IVideoDAO{
 	}
 	
 	@Override
-	public List<Video> getAllVideos(int pageNo) throws DBException {
+	public List<Video> getAllVideos(int pageNo,int pageSize) throws DBException {
 		List<Video> videoList;
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			String hql = "FROM Video";
 			Query<Video> query = session.createQuery(hql, Video.class);
-			query.setFirstResult(pageNo);
-			query.setMaxResults(3);
+			query.setFirstResult(pageNo*pageSize);
+			query.setMaxResults(pageSize);
 			videoList = query.getResultList();
 		} catch (Exception e) {
 			throw new DBException("Error in fetching video records");
@@ -58,6 +58,12 @@ public class VideoDAOImpl implements IVideoDAO{
 		return videoList;
 	}
 	
+	
+	@Override
+	public int getSize()  {
+		
+		return sessionFactory.getCurrentSession().createQuery("From Video",Video.class).getResultList().size();
+	}
 	
 	@Override
 	public List<Video> getAllVideos() throws DBException {

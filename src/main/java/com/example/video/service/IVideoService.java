@@ -42,5 +42,7 @@ public interface IVideoService {
 
 	User getUser(String name) throws ServiceException;
 
-	List<Video> getAllVideos(int pageNo) throws ServiceException;
+	List<Video> getAllVideos(int pageNo,int pageSize) throws ServiceException;
+
+	int getSize() throws ServiceException;
 }

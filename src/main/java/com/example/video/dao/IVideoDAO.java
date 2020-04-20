@@ -50,5 +50,7 @@ interface IVideoDAO {
 
 	User findUserByName(String name) throws DBException;
 
-	List<Video> getAllVideos(int pageNo) throws DBException;
+	List<Video> getAllVideos(int pageNo,int pageSize) throws DBException;
+
+	int getSize() throws DBException;
 }

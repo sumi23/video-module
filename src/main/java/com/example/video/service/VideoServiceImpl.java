@@ -26,6 +26,12 @@ public class VideoServiceImpl implements IVideoService {
 
 	
 	@Override
+	public int getSize()  {
+		
+		return videoDAOImpl.getSize();
+	}
+	
+	@Override
 	public User getUser(String name) throws ServiceException {
 		User user;
 		try {
@@ -39,11 +45,12 @@ public class VideoServiceImpl implements IVideoService {
 	}
 	
 	@Override
-	public List<Video> getAllVideos(int pageNo) throws ServiceException {
+	public List<Video> getAllVideos(int pageNo,int pageSize) throws ServiceException {
 		List<Video> videos;
 		try {
 			System.out.println("page no in service"+pageNo);
-			videos = videoDAOImpl.getAllVideos(pageNo);
+			System.out.println("page size in service"+pageSize);
+			videos = videoDAOImpl.getAllVideos(pageNo,pageSize);
 			if (videos.isEmpty())
 				throw new ServiceException(BusinessConstant.VIDEOS_NOT_FOUND);
 		} catch (DBException e) {

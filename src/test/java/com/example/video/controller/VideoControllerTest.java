@@ -6,6 +6,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -22,12 +23,23 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
+
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -39,6 +51,9 @@ import com.example.video.model.Video;
 import com.example.video.service.VideoServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@AutoConfigureRestDocs()
+@WebAppConfiguration
+@ExtendWith({ RestDocumentationExtension.class, SpringExtension.class })
 class VideoControllerTest {
 
 	private MockMvc mockMvc;
@@ -60,9 +75,10 @@ class VideoControllerTest {
 	private ObjectMapper objectmapper;
 
 	@BeforeEach
-	public void init() {
+	public void init(RestDocumentationContextProvider restDocumentation) {
 		MockitoAnnotations.initMocks(this);
-		mockMvc = MockMvcBuilders.standaloneSetup(videoController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(videoController)
+				.apply(documentationConfiguration(restDocumentation)).build();
 		levelList = getLevelList();
 		categoryList = getCategoryList();
 		videoList = getVideoList();
@@ -74,7 +90,7 @@ class VideoControllerTest {
 	@Test
 	void testDoGetAllVideos() throws Exception {
 		when(videoService.getAllVideos()).thenReturn(videoList);
-		this.mockMvc.perform(get("/list")).andExpect(status().isOk());
+		this.mockMvc.perform(get("/list")).andExpect(status().isOk()).andDo(document("{methodName}",preprocessRequest(prettyPrint()),preprocessResponse(prettyPrint())));
 	}
 
 	@Test

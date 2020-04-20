@@ -38,6 +38,11 @@ public class VideoController {
 	private VideoServiceImpl videoService;
 
 	
+	@GetMapping(value = "/size")
+	public int doGetSize()  {
+		return videoService.getSize();
+	}
+
 	@GetMapping(value = "/user/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<HTTPStatusResponse> doGetUser(@PathVariable String name)  {
 		User user;
@@ -53,12 +58,15 @@ public class VideoController {
 	}
 	
 	
-	@GetMapping(value = "/listVideo/{pageNo}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<HTTPStatusResponse> doGetAllVideosList(@PathVariable int pageNo)  {
+	@GetMapping(value = "/listVideo", produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<HTTPStatusResponse> doGetAllVideosList(@PathVariable int pageNo,
+//			@PathVariable int pageSize)  {
+	public ResponseEntity<HTTPStatusResponse> doGetAllVideosList(@RequestParam(defaultValue="0")int pageNo,
+			@RequestParam(defaultValue="5")int pageSize)  {
 		List<Video> videos;
 		try {
 			
-			videos = videoService.getAllVideos(pageNo);
+			videos = videoService.getAllVideos(pageNo,pageSize);
 			System.out.println("page no in cont"+pageNo);
 		} catch (ServiceException e) {
 			return new ResponseEntity<>(new HTTPStatusResponse(HttpStatus.NOT_FOUND.value(), e.getMessage()),
