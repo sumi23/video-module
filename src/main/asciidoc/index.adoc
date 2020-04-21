@@ -1,0 +1,16 @@
+= Video REST DOCS 
+Getting Started With Spring REST Docs
+
+This is an example output for a service running at http://localhost:8080
+
+== Video API 
+
+GET API For Video
+
+.Request
+include::{snippets}/testDoGetAllVideos/http-request.adoc[]
+
+.Response
+include::{snippets}/testDoGetAllVideos/http-response.adoc[]
+
+

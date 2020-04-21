@@ -40,10 +40,10 @@ outputs.dir snippetsDir
 }
 
 asciidoctor {
-	sourceDir 'src/main/asciidoc'
-attributes \
-		'snippets': file('build/generated-snippets')
-	dependsOn test
+	attributes 'snippets': snippetsDir
+      inputs.dir snippetsDir
+      dependsOn test
+      sourceDir 'src/main/asciidoc'
 }
 
 bootJar {

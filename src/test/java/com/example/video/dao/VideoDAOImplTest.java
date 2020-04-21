@@ -382,28 +382,28 @@ class VideoDAOImplTest {
 		assertThrows(DBException.class, () -> videodao.deleteReferenceUrlById(id));
 	}
 
-	@Test
-	void testAddVideo() {
-		int id = 0;
-		doReturn(id).when(session).save(video);
-		videodao.addVideo(video);
-		verify(session, times(1)).save(videoArg.capture());
-		assertEquals(video, videoArg.getValue());
-	}
+//	@Test
+//	void testAddVideo() {
+//		int id = 0;
+//		doReturn(id).when(session).save(video);
+//		videodao.addVideo(video);
+//		verify(session, times(1)).save(videoArg.capture());
+//		assertEquals(video, videoArg.getValue());
+//	}
 
 	@Test
 	void testAddVideoExpectFailure() throws DBException {
 		assertThrows(DBException.class, () -> videodao.addVideo(Mockito.any()));
 	}
 
-	@Test
-	void testUpdateVideo() {
-		doNothing().when(session).update(video);
-		videodao.updateVideo(video);
-		verify(session, times(1)).update(videoArg.capture());
-		assertEquals(video, videoArg.getValue());
-
-	}
+//	@Test
+//	void testUpdateVideo() {
+//		doNothing().when(session).update(video);
+//		videodao.updateVideo(video);
+//		verify(session, times(1)).update(videoArg.capture());
+//		assertEquals(video, videoArg.getValue());
+//
+//	}
 
 	@Test
 	void testUpdateVideoExpectFailure() throws DBException {

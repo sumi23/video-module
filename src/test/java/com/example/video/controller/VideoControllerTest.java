@@ -30,6 +30,7 @@ import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -52,6 +53,7 @@ import com.example.video.service.VideoServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @AutoConfigureRestDocs()
+@SpringBootTest
 @WebAppConfiguration
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class })
 class VideoControllerTest {
@@ -153,7 +155,7 @@ class VideoControllerTest {
 	@Test
 	void testDoGetVideoById() throws Exception {
 		when(videoService.getVideoById(anyInt())).thenReturn(video);
-		this.mockMvc.perform(get("/listById/{id}", anyInt())).andExpect(status().isOk());
+		this.mockMvc.perform(get("/listById/{id}", anyInt())).andExpect(status().isOk()).andDo(document("{methodName}",preprocessRequest(prettyPrint()),preprocessResponse(prettyPrint())));
 		verify(videoService, times(1)).getVideoById(anyInt());
 	}
 
